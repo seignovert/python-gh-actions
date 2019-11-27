@@ -11,7 +11,7 @@ VERSION = (HERE / 'foo' / '__version__.py').read_text().split("'")[1]
 
 
 setup(
-    name='foo',
+    name='foo-gh-actions',
     version=VERSION,
     description='Foo test module',
     long_description=README,
