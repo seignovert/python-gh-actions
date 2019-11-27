@@ -7,7 +7,7 @@ on:
 
 jobs:
   tests:
-    name: Test package before upload
+    name: Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -30,7 +30,7 @@ jobs:
         pytest
 
   pypi:
-    name: Build and upload to PyPI
+    name: PyPI
     needs: tests
     runs-on: ubuntu-latest
     steps:
@@ -53,7 +53,7 @@ jobs:
         twine upload --repository-url $PYPI_URL dist/*
 
   release:
-    name: Create a release on Github
+    name: Release
     needs: pypi
     runs-on: ubuntu-latest
     steps:
