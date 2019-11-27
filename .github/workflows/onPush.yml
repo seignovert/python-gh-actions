@@ -48,7 +48,7 @@ jobs:
       run: |
         pip install flake8
         flake8 foo/ test/
-    - name: Lint with flake8
+    - name: Lint with pylint
       run: |
         pip install pylint
-        pylint --rcfile=setup.cfg foo/ tests/
+        pylint --rcfile=setup.cfg foo/ tests/*.py
