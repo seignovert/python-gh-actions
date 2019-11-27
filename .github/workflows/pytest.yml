@@ -1,0 +1,31 @@
+name: Pytest tests (3.6/3.7/3.8)
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 3
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies and package
+      run: |
+        python -m pip install --upgrade pip
+        python setup.py install
+        python -c 'from foo import foo'        
+    - name: Lint with flake8
+      run: |
+        pip install -r tests/requirements.txt
+        pylint --rcfile=setup.cfg foo
+        flake8
+    - name: Test with pytest
+      run: pytest --cov
