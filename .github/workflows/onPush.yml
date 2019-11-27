@@ -2,10 +2,9 @@ name: Python test and lint
 
 on: [push]
 
-runs-on: ubuntu-latest
-
 jobs:
   pytest:
+    runs-on: ubuntu-latest
     strategy:
       max-parallel: 3
       matrix:
@@ -32,6 +31,8 @@ jobs:
         pytest --cov foo
 
   linter:
+    runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python 3.6
