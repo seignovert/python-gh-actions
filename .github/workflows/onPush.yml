@@ -1,4 +1,4 @@
-name: Github actions
+name: Python test and lint
 
 on: [push]
 
