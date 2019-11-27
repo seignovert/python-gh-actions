@@ -16,7 +16,7 @@ setup(
     description='Foo test module',
     long_description=README,
     long_description_content_type='text/markdown',
-    url='https://github.com/seignovert/foo',
+    url='https://github.com/seignovert/python-gh-actions',
     author='Benoit Seignovert',
     author_email='dev@seignovert.fr',
     license='MIT',
