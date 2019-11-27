@@ -1,7 +1,8 @@
 Foo test python package
 =======================
 
-[![Github tests](https://github.com/seignovert/python-gh-actions/workflows/Python%20test%20and%20lint/badge.svg)](https://github.com/seignovert/python-gh-actions/actions)
+[![Pytest](https://github.com/seignovert/python-gh-actions/workflows/Pytest/badge.svg)](https://github.com/seignovert/python-gh-actions/actions)
+[![Linter](https://github.com/seignovert/python-gh-actions/workflows/Linter/badge.svg)](https://github.com/seignovert/python-gh-actions/actions)
 
 ```python
 >>> from foo import foo
