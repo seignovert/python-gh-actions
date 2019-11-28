@@ -9,7 +9,7 @@ on:
   push:
     paths:
       - '**.py'
-      - '!**/__version__.py'
+      - '!**__version__.py'
 
 jobs:
   flake8:
