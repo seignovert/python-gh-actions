@@ -2,10 +2,9 @@ name: Pytest
 
 on:
   push:
-    tags-ignore:
-      - '*'
     paths:
-      - '**.py'
+      - '**/*.py'
+      - '!foo/__version__.py'
 
 jobs:
   pytest:
