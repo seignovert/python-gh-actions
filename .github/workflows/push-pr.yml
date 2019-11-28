@@ -3,6 +3,8 @@ name: Tests and Linter
 env:
   PACKAGE: foo
   PYTHON: 3.6
+  PYTHON_VERSION: 3.6, 3.7, 3.8
+  MAX_PARALLEL: 3
 
 on:
   pull_request:
@@ -42,9 +44,9 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      max-parallel: 3
+      max-parallel: ${{ env.MAX_PARALLEL }}
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [${{ env.PYTHON_VERSION }}]
 
     steps:
     - name: Checkout
