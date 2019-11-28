@@ -17,80 +17,74 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo flake8
+    - name: Checkout
+      uses: actions/checkout@v1
 
-    # - name: Checkout
-    #   uses: actions/checkout@v1
+    - name: Set up Python ${{ env.PYTHON }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON }}
 
-    # - name: Set up Python ${{ env.PYTHON }}
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: ${{ env.PYTHON }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
 
-    # - name: Install dependencies
-    #   run: |
-    #     python -m pip install --upgrade pip
-    #     pip install flake8
-
-    # - name: Flake8
-    #   run: flake8 $PACKAGE/ tests/
+    - name: Flake8
+      run: flake8 $PACKAGE/ tests/
 
   pylint:
     name: Pylint
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo pylint
+    - name: Checkout
+      uses: actions/checkout@v1
 
-    # - name: Checkout
-    #   uses: actions/checkout@v1
+    - name: Set up Python ${{ env.PYTHON }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON }}
 
-    # - name: Set up Python ${{ env.PYTHON }}
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: ${{ env.PYTHON }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
 
-    # - name: Install dependencies
-    #   run: |
-    #     python -m pip install --upgrade pip
-    #     pip install pylint
-
-    # - name: Pylint
-    #   run: pylint --rcfile=setup.cfg $PACKAGE/ tests/*.py
+    - name: Pylint
+      run: pylint --rcfile=setup.cfg $PACKAGE/ tests/*.py
 
   tests:
     name: Pytest
     runs-on: ubuntu-latest
 
-    # strategy:
-    #   max-parallel: 3
-    #   matrix:
-    #     python-version: [3.6, 3.7, 3.8]
+    strategy:
+      max-parallel: 3
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
-      - run: echo pytest
+    - name: Checkout
+      uses: actions/checkout@v1
 
-    # - name: Checkout
-    #   uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
-    # - name: Set up Python ${{ matrix.python-version }}
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest pytest-cov
 
-    # - name: Install dependencies
-    #   run: |
-    #     python -m pip install --upgrade pip
-    #     pip install flake8 pytest pytest-cov
+    - name: Lint for errors
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    # - name: Lint for errors
-    #   run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    - name: Install package
+      run: python setup.py install
 
-    # - name: Install package
-    #   run: python setup.py install
-
-    # - name: Run pytest and coverage
-    #   run: pytest --cov $PACKAGE/
+    - name: Run pytest and coverage
+      run: pytest --cov $PACKAGE/
 
   pypi:
     name: Deploy to PyPI
@@ -99,30 +93,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo pypi
+    - name: Checkout
+      uses: actions/checkout@v1
 
-  #   - name: Checkout
-  #     uses: actions/checkout@v1
+    - name: Set up Python ${{ env.PYTHON }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ env.PYTHON }}
 
-  #   - name: Set up Python ${{ env.PYTHON }}
-  #     uses: actions/setup-python@v1
-  #     with:
-  #       python-version: ${{ env.PYTHON }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
 
-  #   - name: Install dependencies
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       pip install setuptools wheel twine
+    - name: Build package
+      run: python setup.py sdist bdist_wheel
 
-  #   - name: Build package
-  #     run: python setup.py sdist bdist_wheel
-
-  #   - name: Publish to PyPI
-  #     env:
-  #       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-  #       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-  #       PYPI_URL: ${{ secrets.PYPI_URL }}
-  #     run: twine upload --repository-url $PYPI_URL dist/*
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        PYPI_URL: ${{ secrets.PYPI_URL }}
+      run: twine upload --repository-url $PYPI_URL dist/*
 
   release:
     name: Release to Github
@@ -130,15 +122,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo release
+      - name: Checkout
+        uses: actions/checkout@master
 
-  #     - name: Checkout
-  #       uses: actions/checkout@master
-
-  #     - name: Create Release
-  #       uses: actions/create-release@v1
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #       with:
-  #         tag_name: ${{ github.ref }}
-  #         release_name: Release ${{ github.ref }}
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
