@@ -1,4 +1,7 @@
-name: Deploy
+name: Deploy to PyPI
+
+env:
+  PYTHON: 3.6
 
 on:
   push:
@@ -7,66 +10,71 @@ on:
 
 jobs:
   tests:
-    name: Test
+    name: Test package
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.6
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up Python $PYTHON
       uses: actions/setup-python@v1
       with:
-        python-version: 3.6
+        python-version: $PYTHON
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python setup.py install
-        python -c 'from foo import foo'
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pytest
+        pip install flake8 pytest
+
+    - name: Lint for errors
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: Install package
+      run: python setup.py install
+
+    - name: Validate test package
+      run: pytest
 
   pypi:
-    name: PyPI
+    name: Deploy to PyPI
     needs: tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.6
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up Python $PYTHON
       uses: actions/setup-python@v1
       with:
-        python-version: 3.6
+        python-version: $PYTHON
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install setuptools wheel twine
-    - name: Build and publish
+
+    - name: Build package
+      run: python setup.py sdist bdist_wheel
+
+    - name: Publish to PyPI
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         PYPI_URL: ${{ secrets.PYPI_URL }}
-      run: |
-        python setup.py sdist bdist_wheel
-        twine upload --repository-url $PYPI_URL dist/*
+      run: twine upload --repository-url $PYPI_URL dist/*
 
   release:
-    name: Release
+    name: Release to Github
     needs: pypi
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@master
+
       - name: Create Release
-        id: create_release
         uses: actions/create-release@v1
         env:
-          # This token is provided by Actions, you do not need to create your own token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false

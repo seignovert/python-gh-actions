@@ -1,0 +1,72 @@
+name: Tests and Linter
+
+env:
+  PACKAGE: foo
+  PYTHON: 3.6
+  PYTHON_VERSION: [3.6, 3.7, 3.8]
+  MAX_PARALLEL: 3
+
+on:
+  pull_request:
+  push:
+    paths:
+      - '**.yml'
+      - '**.py'
+      - '!**/__version__.py'
+
+jobs:
+  linter:
+    name: Pylint/Flake8
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up Python $PYTHON
+      uses: actions/setup-python@v1
+      with:
+        python-version: $PYTHON
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint flake8
+
+    - name: Pylint
+      run: pylint --rcfile=setup.cfg $PACKAGE/ tests/*.py
+
+    - name: Flake8
+      run: flake8 $PACKAGE/ tests/
+
+  test:
+    name: Pytest
+    runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: $MAX_PARALLEL
+      matrix:
+        python-version: $PYTHON_VERSION
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest pytest-cov
+
+    - name: Lint for errors
+      run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: Install package
+      run: python setup.py install
+
+    - name: Run pytest and coverage
+      run: pytest --cov $PACKAGE/
