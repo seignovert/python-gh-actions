@@ -8,8 +8,8 @@ on:
   pull_request:
   push:
     paths:
-      - '**.py'
-      - '!foo/__version__.py'
+    - '**.py'
+    - '!**/__version__.py'
 
 jobs:
   flake8:
