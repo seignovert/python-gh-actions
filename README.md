@@ -2,6 +2,7 @@ Test python package with Github actions
 =======================================
 
 [![Github Actions](https://github.com/seignovert/python-gh-actions/workflows/Github%20Actions/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3AGithub%20Actions)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/seignovert/python-gh-actions?logo=github)
 
 See [`.github/workflows/actions.yml`](.github/workflows/actions.yml)
 
