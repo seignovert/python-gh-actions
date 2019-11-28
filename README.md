@@ -1,12 +1,8 @@
-Foo test python package
-=======================
+Test python package with Github actions
+=======================================
 
-[![Pytest](https://github.com/seignovert/python-gh-actions/workflows/Pytest/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3APytest)
-[![Linter](https://github.com/seignovert/python-gh-actions/workflows/Linter/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3ALinter)
-[![Deploy](https://github.com/seignovert/python-gh-actions/workflows/Deploy/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3ADeploy)
+[![Tests and Linter](https://github.com/seignovert/python-gh-actions/workflows/Tests%20and%20Linter/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3ATests%20and%20Linter)
+[![Deploy to PyPI](https://github.com/seignovert/python-gh-actions/workflows/Deploy%20to%20PyPI/badge.svg)](https://github.com/seignovert/python-gh-actions/actions?query=workflow%3ADeploy%20to%20PyPI)
 
-```python
->>> from foo import foo
->>> foo()
-'bar'
-```
+* See [.github/workflows/push-pr-py.yml](.github/workflows/push-pr-py.yml) for `push` and `pull request` CI using `flake8`, `pylint` and `pytest` (3.6 / 3.7 / 3.8) when `**.py` is committed.
+* See [.github/workflows/tag.yml](.github/workflows/tag.yml) for `tag` CD to deploy to `PyPI` and `Github releases`.
