@@ -9,9 +9,7 @@ on:
   push:
     paths:
       - '**.py'
-      - '!**__version__.py'
-    tags-ignore:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - '!foo/__version__.py'
 
 jobs:
   flake8:
