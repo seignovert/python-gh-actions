@@ -3,6 +3,7 @@ name: Github Actions
 env:
   PACKAGE: foo
   PYTHON: 3.6
+  PYPI_REPO: '--repository-url https://test.pypi.org/legacy/'
 
 on:
   pull_request:
@@ -113,10 +114,9 @@ jobs:
 
     - name: Publish to PyPI
       env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        PYPI_URL: ${{ secrets.PYPI_URL }}
-      run: twine upload --repository-url $PYPI_URL dist/*
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      run: twine upload $PYPI_REPO dist/*
 
   release:
     name: Release to Github
