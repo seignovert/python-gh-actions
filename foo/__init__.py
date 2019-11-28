@@ -1,4 +1,4 @@
-"""Foo module."""
+"""Foo and bar module."""
 
 
 def foo() -> str:
