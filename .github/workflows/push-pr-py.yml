@@ -10,6 +10,8 @@ on:
     paths:
       - '**.py'
       - '!**__version__.py'
+    tags-ignore:
+      - '*'
 
 jobs:
   flake8:
