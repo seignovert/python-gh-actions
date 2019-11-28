@@ -2,10 +2,10 @@
 
 
 def foo() -> str:
-    """Display bar."""
-    return 'bar'
+    """Display foo."""
+    return 'foo'
 
 
 def bar() -> str:
-    """Display foo."""
-    return 'foo'
+    """Display bar."""
+    return 'bar'
