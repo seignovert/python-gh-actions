@@ -1,6 +1,11 @@
 name: Pytest
 
-on: [push, pull_request]
+on:
+  push:
+    tags-ignore:
+      - '*'
+    paths:
+      - '**.py'
 
 jobs:
   pytest:
